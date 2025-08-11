@@ -32,12 +32,13 @@ print(reviews.head())
 review = reviews["review_text"][0]
 
 
-query = """ You are an assistant that analyses customer reviews and identify sentiment. \
-            The sentiment can be positive, negative or neutral.\
-            Make sure to return the output using the following sample format. \
-            {"sentiment": "positive", "confidence": 0.9} \
-            The confidence should be a float between 0 and 1.
-      """
+query = """ You are a sentiment analysis expert. Please analyze the following text and return a detailed JSON response with the following fields:
+            - "sentiment_label": a string "positive", "negative", or "neutral" representing the overall sentiment.
+            - "confidence_score": a numeric value between 0 and 1 indicating how confident you are in your sentiment classification.
+            - "emotions": an array with the name of the detected emotions (e.g., "joy", "anger", "sadness", "surprise", "fear").
+            Return the response in valid JSON format. Do not include the keyword json in the output
+
+        """
 
 
 prompt_messages = [
