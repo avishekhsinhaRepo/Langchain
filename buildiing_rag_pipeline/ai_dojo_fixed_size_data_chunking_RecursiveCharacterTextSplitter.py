@@ -1,12 +1,8 @@
-from langchain_openai import AzureOpenAIEmbeddings, AzureChatOpenAI
+from langchain_openai import AzureChatOpenAI
 from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_chroma import Chroma
-from langchain.prompts import ChatPromptTemplate
 import os
 from dotenv import load_dotenv
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
 
 load_dotenv()
 
@@ -25,14 +21,6 @@ llm = AzureChatOpenAI(
     api_key=subscription_key,
 )
 
-# Initialize the Azure OpenAI Embeddings for vector creation
-embeddings = AzureOpenAIEmbeddings(
-    azure_deployment=embedding_deployment,
-    api_version=api_version,
-    azure_endpoint=endpoint,
-    api_key=subscription_key,
-)
-
 
 def load_pdf_with_langchain(pdf_path):
     loader = PyMuPDFLoader(pdf_path)
@@ -40,9 +28,25 @@ def load_pdf_with_langchain(pdf_path):
     return document
 
 
+def recursive_chunking(docs, chunk_size=1000, chunk_overlap=200):
+    """
+    Splits documents into fixed-size chunks.
+    """
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size, chunk_overlap=chunk_overlap
+    )
+    return text_splitter.split_documents(docs)
+
+
 docs = load_pdf_with_langchain("rag/academic_research_data.pdf")
+
 print("\n Sample Extracted Content:")
 for i, doc in enumerate(docs[:3]):
     print(f"\n--- Chunk {i + 1} ---")
     print(doc.page_content[:500])  # Show first 500 characters
     print("Metadata:", doc.metadata)
+
+recursive_chunks = recursive_chunking(docs)
+print("\nTotal Recursive Chunks:", len(recursive_chunks))
+print("\n--- First Recursive Chunk ---")
+print(recursive_chunks[0].page_content[:])  # Show first 500 characters
