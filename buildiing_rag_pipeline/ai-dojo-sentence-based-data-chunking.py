@@ -1,15 +1,16 @@
-from langchain_openai import AzureOpenAIEmbeddings, AzureChatOpenAI
+from langchain_openai import AzureChatOpenAI
 from langchain_community.document_loaders import PyMuPDFLoader
-from langchain_text_splitters import (
-    RecursiveCharacterTextSplitter,
-    CharacterTextSplitter,
-)
-from langchain_chroma import Chroma
-from langchain.prompts import ChatPromptTemplate
 import os
 from dotenv import load_dotenv
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
+from nltk.tokenize import sent_tokenize
+import nltk
+
+# Download required NLTK data
+try:
+    nltk.data.find("tokenizers/punkt_tab")
+except LookupError:
+    print("Downloading NLTK punkt tokenizer...")
+    nltk.download("punkt_tab")
 
 load_dotenv()
 
@@ -28,14 +29,6 @@ llm = AzureChatOpenAI(
     api_key=subscription_key,
 )
 
-# Initialize the Azure OpenAI Embeddings for vector creation
-embeddings = AzureOpenAIEmbeddings(
-    azure_deployment=embedding_deployment,
-    api_version=api_version,
-    azure_endpoint=endpoint,
-    api_key=subscription_key,
-)
-
 
 def load_pdf_with_langchain(pdf_path):
     loader = PyMuPDFLoader(pdf_path)
@@ -43,9 +36,24 @@ def load_pdf_with_langchain(pdf_path):
     return document
 
 
+def sentence_based_chunking(docs, sentences_per_chunk=3):
+    chunks = []
+    for doc in docs:
+        sentences = sent_tokenize(doc.page_content)
+        for i in range(0, len(sentences), sentences_per_chunk):
+            chunk_text = " ".join(sentences[i : i + sentences_per_chunk])
+            chunks.append(chunk_text)
+    return chunks
+
+
 docs = load_pdf_with_langchain("rag/academic_research_data.pdf")
-print("\n Sample Extracted Content:")
-for i, doc in enumerate(docs[:3]):
-    print(f"\n--- Chunk {i + 1} ---")
-    print(doc.page_content[:500])  # Show first 500 characters
-    print("Metadata:", doc.metadata)
+# print("\n Sample Extracted Content:")
+# for i, doc in enumerate(docs[:3]):
+#     print(f"\n--- Chunk {i + 1} ---")
+#     print(doc.page_content[:500])  # Show first 500 characters
+#     print("Metadata:", doc.metadata)
+
+sentence_chunks = sentence_based_chunking(docs)
+print(f"Total Sentence Chunks: {len(sentence_chunks)}\n")
+print("First Sentence Chunk\n")
+print(sentence_chunks[0][:])

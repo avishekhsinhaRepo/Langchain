@@ -1,15 +1,9 @@
-from langchain_openai import AzureOpenAIEmbeddings, AzureChatOpenAI
+from langchain_openai import AzureChatOpenAI
 from langchain_community.document_loaders import PyMuPDFLoader
-from langchain_text_splitters import (
-    RecursiveCharacterTextSplitter,
-    CharacterTextSplitter,
-)
-from langchain_chroma import Chroma
-from langchain.prompts import ChatPromptTemplate
+
 import os
 from dotenv import load_dotenv
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
+
 
 load_dotenv()
 
@@ -23,14 +17,6 @@ gpt_deployment = os.environ["AZURE_OPENAI_DEPLOYMENT"]  # Your GPT model deploym
 # Initialize the Azure OpenAI Chat model for text generation
 llm = AzureChatOpenAI(
     azure_deployment=gpt_deployment,
-    api_version=api_version,
-    azure_endpoint=endpoint,
-    api_key=subscription_key,
-)
-
-# Initialize the Azure OpenAI Embeddings for vector creation
-embeddings = AzureOpenAIEmbeddings(
-    azure_deployment=embedding_deployment,
     api_version=api_version,
     azure_endpoint=endpoint,
     api_key=subscription_key,

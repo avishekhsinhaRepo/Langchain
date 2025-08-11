@@ -1,15 +1,9 @@
-from langchain_openai import AzureOpenAIEmbeddings, AzureChatOpenAI
+from langchain_openai import AzureChatOpenAI
 from langchain_community.document_loaders import PyMuPDFLoader
-from langchain_text_splitters import (
-    RecursiveCharacterTextSplitter,
-    CharacterTextSplitter,
-)
-from langchain_chroma import Chroma
-from langchain.prompts import ChatPromptTemplate
+
 import os
 from dotenv import load_dotenv
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
+
 
 load_dotenv()
 
@@ -28,19 +22,26 @@ llm = AzureChatOpenAI(
     api_key=subscription_key,
 )
 
-# Initialize the Azure OpenAI Embeddings for vector creation
-embeddings = AzureOpenAIEmbeddings(
-    azure_deployment=embedding_deployment,
-    api_version=api_version,
-    azure_endpoint=endpoint,
-    api_key=subscription_key,
-)
-
 
 def load_pdf_with_langchain(pdf_path):
     loader = PyMuPDFLoader(pdf_path)
     document = loader.load()
     return document
+
+
+# Define a function to split based on paragraph breaks (using two newlines)
+
+
+def semantic_chunking(docs):
+
+    chunks = []
+    for doc in docs:
+        paragraphs = doc.page_content.split("\n\n")
+        for para in paragraphs:
+            cleaned = para.strip()
+            if cleaned:
+                chunks.append(cleaned)
+    return chunks
 
 
 docs = load_pdf_with_langchain("rag/academic_research_data.pdf")
@@ -49,3 +50,7 @@ for i, doc in enumerate(docs[:3]):
     print(f"\n--- Chunk {i + 1} ---")
     print(doc.page_content[:500])  # Show first 500 characters
     print("Metadata:", doc.metadata)
+
+semantic_chunks = semantic_chunking(docs)
+print(f" Total semantic chunks: {len(semantic_chunks)}")
+print(f" Example:\n{semantic_chunks[0][:]}")
