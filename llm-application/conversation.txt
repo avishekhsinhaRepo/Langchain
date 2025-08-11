@@ -1,0 +1,29 @@
+Doctor: Hi there, how are you feeling today?
+Patient: Not so great. I've been feeling feverish and having some stomach pain.
+Doctor: I see. Can you tell me more about what's been going on?
+Patient: Yeah, I've had a fever, some yellow patches on my skin, and pain in the right part of my abdomen. I've also lost my appetite.
+Doctor: Got it. When did these symptoms start?
+Patient: About six months ago.
+Doctor: And where were you living at that time?
+Patient: I was living in a small town in Missouri.
+Doctor: Okay. Did you eat anything unusual before you started feeling sick?
+Patient: Yes, I used to eat local watercress from the area.
+Doctor: I see. Did you go to a doctor for these symptoms?
+Patient: Yes, I went to a local hospital, and they treated me for the symptoms.
+Doctor: Did the treatment help? Do you have any medical reports?
+Patient: No, the treatment did not help, my fever, yellowing, and stomach pain continued. I got some tests done. The details are available in my medical file.
+Doctor: I understand. Let's look at your lab results. Your white blood cell count was 4.3, platelets were 245, hemoglobin was 12.3, and hematocrit was 37.9. Your blood smear showed a high number of eosinophils, about 36% of your white blood cells.
+Patient: Okay.
+Doctor: Your stool test was negative for parasites.
+Patient: That's good, I guess.
+Doctor: Your liver tests showed elevated enzymes: AST was 37, ALT was 63, and alkaline phosphatase was 458. Your total bilirubin was normal.
+Patient: I am really worried now.
+Doctor: Your ultrasound showed an enlarged spleen.
+Patient: What does that mean?
+Doctor: It means your spleen is bigger than normal. An MRCP scan showed a lesion in your liver and some dilated bile ducts.
+Patient: Oh no!
+Doctor: Your initial CT scan showed an enlarged liver and spleen with some lymph nodes and lesions in both liver lobes.
+Patient: What does that mean for me?
+Doctor: To find out more, we did a liver biopsy. It showed some liver damage and inflammation with certain types of cells.
+Patient: So... what should I be worried about?
+Doctor: It means we need to do more tests to figure out what's causing your symptoms and how to treat them. I'll set up some follow-up appointments for you.
