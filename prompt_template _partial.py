@@ -27,6 +27,7 @@ prompt_template = PromptTemplate(
     or non-existent answer: I don't know.
     Answer the question: What is the traditional cuisine of {country}?
     Answer in {no_of_paras} short paras in {language}
+    Say thanks to {my_name}
     """,
 )
 
@@ -35,9 +36,16 @@ no_of_paras = int(input("Enter the number of paras"))
 language = input("Enter the language:")
 
 
-question = prompt_template.format(
-    country=country, no_of_paras=no_of_paras, language=language
+# Create a partial prompt with initial variables
+question = prompt_template.partial(
+    country=country,
+    no_of_paras=no_of_paras,
+    language=language
 )
-# Example usage
-response = llm.invoke(question)
+
+# Create a chain that combines the LLM with the prompt
+chain = {"my_name": lambda name_dict: name_dict["my_name"]} | question | llm
+
+# Run the chain
+response = chain.invoke({"my_name": "Avi"})
 print(response.content)
